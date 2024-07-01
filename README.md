@@ -341,17 +341,117 @@ WHERE bookId = 1;
 
 ## 7. TypeScript Interface for Books Table
 
-(typescript interface)
+### Interface
+
+```typescript
+interface Book {
+  bookId: number;
+  title: string;
+  genre: string;
+  publicationDate: Date;
+  price: number;
+  format: "physical" | "ebook" | "audiobook";
+  authorId: number;
+  publisherId: number;
+  averageRating: number;
+}
+```
+
+### Entity
+
+```typescript
+@Entity()
+export class BookEntity implements Book {
+  @PrimaryGeneratedColumn()
+  bookId: number;
+
+  @Column()
+  @IsNotEmpty()
+  title: string;
+
+  @Column()
+  @IsNotEmpty()
+  genre: string;
+
+  @Column({ type: 'date' })
+  @IsNotEmpty()
+  @IsDate()
+  publicationDate: Date;
+
+  @Column('decimal')
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @Column()
+  @IsNotEmpty()
+  @IsEnum(["physical", "ebook", "audiobook"])
+  format: "physical" | "ebook" | "audiobook";
+
+  @Column()
+  @IsNotEmpty()
+  authorId: number;
+
+  @Column()
+  @IsNotEmpty()
+  publisherId: number;
+
+  @Column('decimal')
+  @IsNumber()
+  averageRating: number;
+}
+```
+
+### CRUD Operations
+
+```typescript
+// Create a new book
+router.post('/', async (req: Request, res: Response) => {
+  const bookRepository = getCustomRepository(BookRepository);
+  const book = bookRepository.create(req.body as BookEntity);
+  await bookRepository.save(book);
+  res.status(201).json(book);
+});
+
+// Read all books
+router.get('/', async (req: Request, res: Response) => {
+  const bookRepository = getCustomRepository(BookRepository);
+  const books = await bookRepository.find();
+  res.status(200).json(books);
+});
+
+// Update a book by ID
+router.put('/:id', async (req: Request, res: Response) => {
+  const bookRepository = getCustomRepository(BookRepository);
+  const bookId = parseInt(req.params.id, 10);
+  const book = await bookRepository.findOne({ where: { bookId } });
+  if (!book) {
+    return res.status(404).json({ message: 'Book not found' });
+  }
+  bookRepository.merge(book, req.body);
+  await bookRepository.save(book);
+  res.status(200).json(book);
+});
+
+// Delete a book by ID
+router.delete('/:id', async (req: Request, res: Response) => {
+  const bookRepository = getCustomRepository(BookRepository);
+  const bookId = parseInt(req.params.id, 10);
+  const book = await bookRepository.findOne({ where: { bookId } });
+  if (!book) {
+    return res.status(404).json({ message: 'Book not found' });
+  }
+  await bookRepository.remove(book);
+  res.status(200).json({ message: 'Book deleted successfully' });
+});
+
+```
+
+More information can be found in the `bookstore` folder of our [GitHub](https://github.com/EdisCode/SENG8071-MidtermAssignment) Repository.
 
 ---
 
-## 8. Running the Application
-
-(running the application)
-
----
-
-## 9. Technologies Used
+## 8. Technologies Used
 
 - Database: PostgreSQL
 - Tools: pgAdmin, Git (Version Control), GitHub (Code Hosting)
