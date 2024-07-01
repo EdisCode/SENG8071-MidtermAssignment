@@ -181,7 +181,6 @@ Before starting, ensure you have the following installed:
 
 ## 6. Books Table DDL & DML
 
-(Ade - DDL & DML)
 ### Data Definition Language (DDL)
 
 ```sql
