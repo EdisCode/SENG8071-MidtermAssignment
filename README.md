@@ -23,8 +23,10 @@
       - [3. Update](#3-update)
       - [4. Delete](#4-delete)
   - [7. TypeScript Interface for Books Table](#7-typescript-interface-for-books-table)
-  - [8. Running the Application](#8-running-the-application)
-  - [9. Technologies Used](#9-technologies-used)
+    - [Interface](#interface)
+    - [Entity](#entity)
+    - [CRUD Operations](#crud-operations)
+  - [8. Technologies Used](#8-technologies-used)
     - [Authors](#authors)
     - [Acknowledgments](#acknowledgments)
 
@@ -373,12 +375,12 @@ export class BookEntity implements Book {
   @IsNotEmpty()
   genre: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: "date" })
   @IsNotEmpty()
   @IsDate()
   publicationDate: Date;
 
-  @Column('decimal')
+  @Column("decimal")
   @IsNotEmpty()
   @IsNumber()
   price: number;
@@ -396,7 +398,7 @@ export class BookEntity implements Book {
   @IsNotEmpty()
   publisherId: number;
 
-  @Column('decimal')
+  @Column("decimal")
   @IsNumber()
   averageRating: number;
 }
@@ -406,7 +408,7 @@ export class BookEntity implements Book {
 
 ```typescript
 // Create a new book
-router.post('/', async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   const bookRepository = getCustomRepository(BookRepository);
   const book = bookRepository.create(req.body as BookEntity);
   await bookRepository.save(book);
@@ -414,19 +416,19 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // Read all books
-router.get('/', async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   const bookRepository = getCustomRepository(BookRepository);
   const books = await bookRepository.find();
   res.status(200).json(books);
 });
 
 // Update a book by ID
-router.put('/:id', async (req: Request, res: Response) => {
+router.put("/:id", async (req: Request, res: Response) => {
   const bookRepository = getCustomRepository(BookRepository);
   const bookId = parseInt(req.params.id, 10);
   const book = await bookRepository.findOne({ where: { bookId } });
   if (!book) {
-    return res.status(404).json({ message: 'Book not found' });
+    return res.status(404).json({ message: "Book not found" });
   }
   bookRepository.merge(book, req.body);
   await bookRepository.save(book);
@@ -434,17 +436,16 @@ router.put('/:id', async (req: Request, res: Response) => {
 });
 
 // Delete a book by ID
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response) => {
   const bookRepository = getCustomRepository(BookRepository);
   const bookId = parseInt(req.params.id, 10);
   const book = await bookRepository.findOne({ where: { bookId } });
   if (!book) {
-    return res.status(404).json({ message: 'Book not found' });
+    return res.status(404).json({ message: "Book not found" });
   }
   await bookRepository.remove(book);
-  res.status(200).json({ message: 'Book deleted successfully' });
+  res.status(200).json({ message: "Book deleted successfully" });
 });
-
 ```
 
 More information can be found in the `bookstore` folder of our [GitHub](https://github.com/EdisCode/SENG8071-MidtermAssignment) Repository.
