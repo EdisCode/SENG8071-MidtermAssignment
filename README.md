@@ -175,7 +175,82 @@ Before starting, ensure you have the following installed:
 
 ## 5. SQL Queries for Requirements
 
-(Nkechi -sql queries)
+Before starting, ensure you have successfully inserted all the sample data.
+
+### Power Writers
+
+```sql
+-- Assuming authorId corresponds to the authors inserted above.
+-- Insert more books published by these authors in the 'Fiction' genre within the last 5 years.
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('Tinkerbell', 'Fiction', '2020-01-01', 19.99, 'physical', 1, 1, 4.2);
+
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('EndGame', 'Fiction', '2021-05-10', 15.99, 'ebook', 1, 2, 4.5);
+
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('X-Men', 'Fiction', '2024-03-15', 12.99, 'audiobook', 1, 1, 4.0);
+
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('Demon Slayer', 'Fiction', '2021-07-20', 14.99, 'physical', 1, 2, 4.7);
+
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('Solo Leveling', 'Fiction', '2023-11-30', 17.99, 'ebook', 1, 1, 4.3);
+
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('50 Shades of Didi', 'Fiction', '2017-12-05', 10.99, 'audiobook', 2, 2, 4.6);
+
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('Who Did It', 'Fiction', '2018-09-01', 16.99, 'physical', 2, 1, 4.4);
+
+-- SQL query to identify author(s) who have published more than 5 books in the 'Fiction' genre within the last 5 years.
+SELECT authorId, name
+FROM Authors
+WHERE authorId IN (
+    SELECT authorId
+    FROM Books
+    WHERE genre = 'Fiction'
+      AND publicationDate >= CURRENT_DATE - INTERVAL '5 years'
+    GROUP BY authorId
+    HAVING COUNT(bookId) > 5
+);
+```
+
+### Loyal Customers
+
+```sql
+SELECT customerId, name
+FROM Customers
+WHERE totalSpent > 1500
+```
+
+### Well-Reviewed Books
+
+```sql
+SELECT bookId, title
+FROM Books
+WHERE averageRating > (SELECT AVG(averageRating) FROM Books);
+```
+
+### Most Popular Genre by Sales
+
+```sql
+SELECT genre
+FROM Books
+GROUP BY genre
+ORDER BY SUM(price) DESC
+LIMIT 1;
+```
+
+### 10 Most Recent Posted Reviews
+
+```sql
+SELECT customerId, bookId, rating, comment, reviewDate
+FROM Reviews
+ORDER BY reviewDate DESC
+LIMIT 10;
+```
+
 
 ---
 
