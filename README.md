@@ -10,6 +10,11 @@
     - [Prerequisites](#prerequisites)
   - [4. Database Setup](#4-database-setup)
   - [5. SQL Queries for Requirements](#5-sql-queries-for-requirements)
+    - [Power Writers](#power-writers)
+    - [Loyal Customers](#loyal-customers)
+    - [Well-Reviewed Books](#well-reviewed-books)
+    - [Most Popular Genre by Sales](#most-popular-genre-by-sales)
+    - [10 Most Recent Posted Reviews](#10-most-recent-posted-reviews)
   - [6. Books Table DDL \& DML](#6-books-table-ddl--dml)
     - [Data Definition Language (DDL)](#data-definition-language-ddl)
     - [Data Manipulation Language (DML)](#data-manipulation-language-dml)
@@ -256,7 +261,6 @@ FROM Reviews
 ORDER BY reviewDate DESC
 LIMIT 10;
 ```
-
 
 ---
 
