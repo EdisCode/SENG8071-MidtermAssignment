@@ -182,6 +182,76 @@ Before starting, ensure you have the following installed:
 ## 6. Books Table DDL & DML
 
 (Ade - DDL & DML)
+### Data Definition Language (DDL)
+
+```sql
+-- Create Books Table (This has already been created)
+CREATE TABLE Books (
+    bookId SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    genre VARCHAR(100),
+    publicationDate DATE,
+    price DECIMAL(10, 2),
+    format VARCHAR(10) CHECK (format IN ('physical', 'ebook', 'audiobook')),
+    authorId INT,
+    publisherId INT,
+    averageRating DECIMAL(2, 1),
+    FOREIGN KEY (authorId) REFERENCES Authors(authorId),
+    FOREIGN KEY (publisherId) REFERENCES Publishers(publisherId)
+);
+```
+
+### Data Manipulation Language (DML)
+
+#### 1. Create
+
+```sql
+-- Insert a new book (This has already been created)
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('The Great Gatsby', 'Fiction', '2000-04-10', 10.99, 'physical', 1, 1, 4.5);
+
+-- Insert another book (This has already been created)
+INSERT INTO Books (title, genre, publicationDate, price, format, authorId, publisherId, averageRating)
+VALUES ('Ade goes to school', 'Dystopian', '2024-06-28', 35.99, 'ebook', 2, 2, 4.7);
+```
+
+#### 2. Read
+
+```sql
+-- Select all books
+SELECT * FROM Books;
+
+-- Select a book by ID
+SELECT * FROM Books WHERE bookId = 1;
+
+-- Select books by a specific author
+SELECT * FROM Books WHERE authorId = 1;
+
+-- Select books within a specific price range
+SELECT * FROM Books WHERE price BETWEEN 10 AND 20;
+```
+
+#### 3. Update
+
+```sql
+-- Update a book's price and average rating
+UPDATE Books
+SET price = 12.99, averageRating = 4.6
+WHERE bookId = 1;
+
+-- Update a book's genre and format
+UPDATE Books
+SET genre = 'Classic', format = 'audiobook'
+WHERE bookId = 2;
+```
+
+#### 4. Delete
+
+```sql
+-- Delete a book
+DELETE FROM Books
+WHERE bookId = 1;
+```
 
 ---
 
